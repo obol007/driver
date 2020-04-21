@@ -167,20 +167,18 @@ local.properties
 .worksheet
 
 
-#iml
-
-#.iml
-
+iml
+.iml
+*.iml
+*.cmd
 #Procfile
 Procfile
 
 #Properties
-
-#.properties
+.properties
 
 HELP.md
-
-#mvnw
-#mvnw/**
-#.mvn
-#.mvn/**
+mvnw
+mvnw/**
+.mvn
+.mvn/**
