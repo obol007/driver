@@ -169,14 +169,17 @@ local.properties
 
 #iml
 .iml
+*.iml
 #Procfile
 Procfile
 
 #Properties
 .properties
+*.properties
 
 HELP.md
 
+mvnw.cmd
 mvnw
 mvnw/**
 .mvn
