@@ -174,3 +174,10 @@ Procfile
 
 #Properties
 .properties
+
+HELP.md
+
+mvnw
+mvnw/**
+.mvn
+.mvn/**
