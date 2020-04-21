@@ -10,6 +10,5 @@ public class DriverRestApiApplication {
 		SpringApplication.run(DriverRestApiApplication.class, args);
 	}
 
-	//comment
 
 }
