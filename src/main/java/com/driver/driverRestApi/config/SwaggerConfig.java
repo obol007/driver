@@ -24,7 +24,8 @@ public class SwaggerConfig {
         return new Docket(DocumentationType.SWAGGER_2)
                 .select()
                 .apis(RequestHandlerSelectors.basePackage("com.driver.driverRestApi.controller"))
-                .paths(regex("/rest.*"))
+//                .paths(regex("/api.*"))
+                .paths(PathSelectors.any())
                 .build()
                 .apiInfo(apiInfo());
     }
