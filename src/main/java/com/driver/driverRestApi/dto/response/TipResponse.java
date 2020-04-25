@@ -1,14 +1,12 @@
 package com.driver.driverRestApi.dto.response;
 
 
-import io.swagger.annotations.ApiModelProperty;
-import io.swagger.annotations.ApiOperation;
-import io.swagger.annotations.ApiParam;
+import com.driver.driverRestApi.dto.request.TagRequest;
 import lombok.Data;
 
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.Set;
+
 
 @Data
 public class TipResponse {
@@ -21,9 +19,6 @@ public class TipResponse {
     private String description;
     private LocalDateTime created;
 
-
-
-
-//    private Set<TagResponse> tags;
+    private Set<TagRequest> tags;
 
 }

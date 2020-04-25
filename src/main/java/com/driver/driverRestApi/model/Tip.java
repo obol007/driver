@@ -28,16 +28,24 @@ public class Tip extends BaseEntity {
 
     private String description;
 
-//    @ManyToMany
-//    private Set<Tag> tags;
+    @ManyToMany
+    private Set<Tag> tags;
 
     @PrePersist
     public void setLocalDateTime(){
         LocalDateTime localDateTime = LocalDateTime.now();
         String text = localDateTime.format(formatter);
         this.created = LocalDateTime.parse(text,formatter);
+
     }
 
+//
+//    String timeColonPattern = "hh:mm:ss a";
+//    DateTimeFormatter timeColonFormatter = DateTimeFormatter.ofPattern(timeColonPattern);
+//    LocalTime colonTime = LocalTime.now();
+//System.out.println(timeColonFormatter.format(colonTime));
+//
+//    The generated output is “05:35:50 PM“.
 //    @PrePersist
 //    public void PrePersist(){
 //        setLocalDateTime(LocalDateTime.now());

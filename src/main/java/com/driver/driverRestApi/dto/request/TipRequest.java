@@ -15,7 +15,7 @@ public class TipRequest {
     private String description;
 
 
-//    private Set<TagRequest> tags;
+    private Set<TagRequest> tags;
 
 
 }
