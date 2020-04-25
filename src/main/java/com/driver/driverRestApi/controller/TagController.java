@@ -1,11 +1,14 @@
 package com.driver.driverRestApi.controller;
 
-import com.driver.driverRestApi.converter.tag.TagConverter;
-import com.driver.driverRestApi.dto.TagDto;
+import com.driver.driverRestApi.converter.TagConverter;
+import com.driver.driverRestApi.dto.response.TagResponse;
 import com.driver.driverRestApi.dto.request.TagRequest;
 import com.driver.driverRestApi.model.Tag;
 import com.driver.driverRestApi.service.impl.TagService;
 import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiResponse;
+import io.swagger.annotations.ApiResponses;
+import org.springframework.hateoas.EntityModel;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -13,7 +16,13 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponents;
 import org.springframework.web.util.UriComponentsBuilder;
 
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.*;
+
+
 import javax.validation.Valid;
+import java.util.List;
+import java.util.stream.Collectors;
+
 
 @RestController
 @RequestMapping("/api/tag")
@@ -26,53 +35,65 @@ public class TagController {
     public TagController(TagService tagService, TagConverter tagConverter) {
         this.tagService = tagService;
         this.tagConverter = tagConverter;
+
     }
 
 
     @GetMapping("/{id}")
-    @ApiOperation(value = "Find a tag on id", notes = "Single tag",
+    @ApiOperation(value = "Find a single tag", notes = "Single tag",
             response = Tag.class)
-    public ResponseEntity<?> getTagById(@PathVariable("id") Long id){
+    @ApiResponses(
+            value = {
+                    @ApiResponse(code = 200, message = "You have found it!")
+            }
+    )
+    public EntityModel<TagResponse> getTag(@PathVariable("id") Long id) {
         Tag tag = tagService.findById(id);
-        TagDto tagDto = tagConverter.tagToDto(tag);
-        return ResponseEntity.ok(tagDto);
+        TagResponse tagResponse = tagConverter.tagToResponse(tag);
+        return new EntityModel<>(tagResponse,
+                linkTo(methodOn(TagController.class).getTag(id)).withSelfRel());
     }
 
+    @GetMapping
+    @ApiOperation(value = "Find all tags")
+    public List<TagResponse> getTags() {
+        List<Tag> tags = tagService.getAllTags();
+        return tags.stream()
+//                .map(tag -> tagConverter.tagToResponse(tag))
+                .map(tagConverter::tagToResponse)
+                .collect(Collectors.toList());
+    }
+
+
     @PostMapping
-    public ResponseEntity<TagDto> createNewTag(@Valid @RequestBody TagRequest tagRequest,
-                                               UriComponentsBuilder builder){
-        Tag tag = tagService.createNewTag(tagConverter.requestToTag(tagRequest));
-        Long id = tag.getId();
+    @ApiOperation(value = "Create a tag")
+    public ResponseEntity<TagResponse> createTag(@Valid @RequestBody TagRequest tagRequest,
+                                                 UriComponentsBuilder builder) {
+        Tag tag = tagConverter.requestToTag(tagRequest);
+        Tag tagCreated = tagService.createTag(tag);
+
+        Long id = tagCreated.getId();
         UriComponents uriComponents = builder.path("/api/tag/{id}").buildAndExpand(id);
         HttpHeaders headers = new HttpHeaders();
         headers.setLocation(uriComponents.toUri());
-        return new ResponseEntity<>(tagConverter.tagToDto(tag),headers, HttpStatus.CREATED);
+        return new ResponseEntity<>(tagConverter.tagToResponse(tagCreated), headers, HttpStatus.CREATED);
+
     }
 
-//    @GetMapping
-//    @ResponseBody
-//    public List<PostDto> getPosts(...) {
-//        //...
-//        List<Post> posts = postService.getPostsList(page, size, sortDir, sort);
-//        return posts.stream()
-//                .map(this::convertToDto)
-//                .collect(Collectors.toList());
-//    }
-//
-//    @PostMapping
-//    @ResponseStatus(HttpStatus.CREATED)
-//    @ResponseBody
-//    public PostDto createPost(@RequestBody PostDto postDto) {
-//        Post post = convertToEntity(postDto);
-//        Post postCreated = postService.createPost(post));
-//        return convertToDto(postCreated);
-//    }
-//
-//    @GetMapping(value = "/{id}")
-//    @ResponseBody
-//    public PostDto getPost(@PathVariable("id") Long id) {
-//        return convertToDto(postService.getPostById(id));
-//    }
+
+    @PutMapping("/{id}")
+    @ApiOperation(value = "Update a tag")
+    public TagResponse updateTag(@RequestBody TagRequest tagRequest,
+                                 @PathVariable Long id) {
+        Tag tag = tagService.updateTag(tagRequest, id);
+        return tagConverter.tagToResponse(tag);
+    }
+
+    @DeleteMapping("/{id}")
+    @ApiOperation(value = "Delete a tag")
+    public void deleteTag(@PathVariable Long id) {
+        tagService.deleteTag(id);
+    }
 
 
 }

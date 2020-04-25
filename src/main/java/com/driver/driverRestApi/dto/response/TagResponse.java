@@ -1,15 +1,14 @@
-package com.driver.driverRestApi.dto;
+package com.driver.driverRestApi.dto.response;
 
-import io.swagger.annotations.ApiModelProperty;
+
 import lombok.Data;
 
 import javax.validation.constraints.NotNull;
 
 @Data
-public class TagDto {
+public class TagResponse {
 
     private Long id;
-    @NotNull
     private String name;
 
 }

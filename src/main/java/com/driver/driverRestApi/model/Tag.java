@@ -14,5 +14,7 @@ import javax.persistence.Entity;
 public class Tag extends BaseEntity {
 
      @ApiModelProperty(notes = "Tag name")
+     //TODO: unique name validation
      private String name;
+
 }

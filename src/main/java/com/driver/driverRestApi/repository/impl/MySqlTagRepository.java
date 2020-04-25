@@ -9,7 +9,7 @@ import java.util.Optional;
 
 
 @Repository("MySQL")
-public interface MySQLTagRepository extends TagRepository, JpaRepository<Tag, Long> {
+public interface MySqlTagRepository extends TagRepository, JpaRepository<Tag, Long> {
 
 
 }
