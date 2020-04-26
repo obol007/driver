@@ -12,7 +12,7 @@ public class DriverRestApiApplication implements WebMvcConfigurer {
 	@Override
 	public void addViewControllers (ViewControllerRegistry registry) {
 		RedirectViewControllerRegistration r =
-				registry.addRedirectViewController("/", "/swagger-ui.html");
+				registry.addRedirectViewController("", "swagger-ui.html");
 	}
 
 	public static void main(String[] args) {

@@ -19,7 +19,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import static springfox.documentation.builders.PathSelectors.regex;
 
 @EnableSwagger2
 @Configuration
