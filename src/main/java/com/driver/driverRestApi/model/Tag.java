@@ -13,7 +13,7 @@ import javax.persistence.Entity;
 @ApiModel(description = "Information about tags")
 public class Tag extends BaseEntity {
 
-     @ApiModelProperty(notes = "Tag name")
+//     @ApiModelProperty(notes = "Tag name")
      //TODO: unique name validation
      private String name;
 
