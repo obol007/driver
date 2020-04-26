@@ -6,6 +6,6 @@ import lombok.Data;
 
 @Data
 public class TagRequest {
-    @ApiModelProperty(notes = "Tag name")
+//    @ApiModelProperty(notes = "Tag name")
     private String name;
 }
