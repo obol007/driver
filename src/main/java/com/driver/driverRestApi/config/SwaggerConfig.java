@@ -20,8 +20,8 @@ import java.util.Collections;
 import java.util.List;
 
 
-@EnableSwagger2
-@Configuration
+//@EnableSwagger2
+//@Configuration
 public class SwaggerConfig {
 
     @Bean

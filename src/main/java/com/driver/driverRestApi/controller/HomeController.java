@@ -10,7 +10,7 @@ public class HomeController {
 
     @GetMapping("/")
     public String start(){
-        return "redirect:/swagger-ui.html";
+        return "redirect:/api/tag";
     }
 
 
