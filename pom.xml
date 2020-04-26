@@ -95,6 +95,13 @@
             <artifactId>spring-boot-starter-hateoas</artifactId>
         </dependency>
 
+        <!--=============Heroku Database ===========-->
+        <dependency>
+            <groupId>com.h2database</groupId>
+            <artifactId>h2</artifactId>
+            <scope>runtime</scope>
+        </dependency>
+
 <!--        <dependency>-->
 <!--            <groupId>org.springframework.data</groupId>-->
 <!--            <artifactId>spring-data-rest-webmvc</artifactId>-->
