@@ -47,11 +47,11 @@ public class SwaggerConfig {
             return new LinkDiscoverers(SimplePluginRegistry.create(plugins));
         }
 
-    @Bean
-    public OrderAwarePluginRegistry<LinkDiscoverer, MediaType> discoverers(
-            OrderAwarePluginRegistry<LinkDiscoverer, MediaType> relProviderPluginRegistry) {
-        return relProviderPluginRegistry;
-    }
+//    @Bean
+//    public OrderAwarePluginRegistry<LinkDiscoverer, MediaType> discoverers(
+//            OrderAwarePluginRegistry<LinkDiscoverer, MediaType> relProviderPluginRegistry) {
+//        return relProviderPluginRegistry;
+//    }
 
 
 
