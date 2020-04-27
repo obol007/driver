@@ -1,4 +1,4 @@
-package com.driver.driverRestApi.config;
+package com.driver.driverRestApi.config.persistance;
 
 import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.context.annotation.Bean;
@@ -13,7 +13,7 @@ import javax.sql.DataSource;
 @EntityScan("com.driver.driverRestApi.model")
 
 //@Configuration
-class PersistenceConfig {
+class PersistanceConfig {
 
     @Bean
     public DataSource dataSource() {
