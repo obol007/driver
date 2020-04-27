@@ -6,8 +6,6 @@ import com.driver.driverRestApi.model.Tip;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Component;
 
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 
 @Component
 public class TipConverter {

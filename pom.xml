@@ -29,11 +29,21 @@
             <artifactId>spring-boot-starter-jersey</artifactId>
         </dependency>
 
+<!--    ======    HATEOAS LINKS======   -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-hateoas</artifactId>
+        </dependency>
 
-        <!--		<dependency>-->
-        <!--			<groupId>org.springframework.boot</groupId>-->
-        <!--			<artifactId>spring-boot-starter-security</artifactId>-->
-        <!--		</dependency>-->
+<!--     ===   JSON LIBRARY =======-->
+        <dependency>
+            <groupId>com.jayway.jsonpath</groupId>
+            <artifactId>json-path</artifactId>
+            <scope>test</scope>
+        </dependency>
+
+
+
 
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -55,6 +65,8 @@
             <artifactId>lombok</artifactId>
             <optional>true</optional>
         </dependency>
+
+
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-test</artifactId>
@@ -81,20 +93,22 @@
         </dependency>
 
         <!--		<dependency>-->
+        <!--			<groupId>org.springframework.boot</groupId>-->
+        <!--			<artifactId>spring-boot-starter-security</artifactId>-->
+        <!--		</dependency>-->
+
+        <!--		<dependency>-->
         <!--			<groupId>org.springframework.security</groupId>-->
         <!--			<artifactId>spring-security-test</artifactId>-->
         <!--			<scope>test</scope>-->
         <!--		</dependency>-->
+
         <dependency>
             <groupId>org.modelmapper</groupId>
             <artifactId>modelmapper</artifactId>
             <version>2.3.7</version>
         </dependency>
 
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-hateoas</artifactId>
-        </dependency>
 
         <!--=============Heroku Database ===========-->
         <dependency>
