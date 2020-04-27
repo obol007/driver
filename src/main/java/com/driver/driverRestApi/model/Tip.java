@@ -1,8 +1,10 @@
 package com.driver.driverRestApi.model;
 
+import com.driver.driverRestApi.dto.response.TagResponse;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import org.springframework.data.annotation.CreatedDate;
+import org.springframework.hateoas.EntityModel;
 
 import javax.persistence.Entity;
 import javax.persistence.ManyToMany;
@@ -30,6 +32,7 @@ public class Tip extends BaseEntity {
 
     @ManyToMany
     private Set<Tag> tags;
+
 
     @PrePersist
     public void setLocalDateTime(){

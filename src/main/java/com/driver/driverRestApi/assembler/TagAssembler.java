@@ -21,4 +21,9 @@ public class TagAssembler implements RepresentationModelAssembler<TagResponse, E
         linkTo(methodOn(TagController.class).getTags()).withRel("tags"));
     }
 
+    public EntityModel<TagResponse> toModelWithSelfRel(TagResponse tagResponse) {
+        return new EntityModel<>(tagResponse,
+                linkTo(methodOn(TagController.class).getTag(tagResponse.getId())).withSelfRel());
+    }
+
 }

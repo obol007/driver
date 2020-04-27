@@ -55,10 +55,8 @@ public class TagController {
 
 
     @GetMapping("/{id}")
-    @ApiOperation(value = "Find a single tag", notes = "Single tag",
-            response = Tag.class)
-    @ApiResponses(
-            value = {
+    @ApiOperation(value = "Find a single tag", notes = "Single tag", response = Tag.class)
+    @ApiResponses(value = {
                     @ApiResponse(code = 200, message = "You have found it!")
             }
     )

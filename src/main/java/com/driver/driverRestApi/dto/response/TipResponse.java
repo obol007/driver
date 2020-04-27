@@ -1,8 +1,7 @@
 package com.driver.driverRestApi.dto.response;
 
-
-import com.driver.driverRestApi.dto.request.TagRequest;
 import lombok.Data;
+import org.springframework.hateoas.EntityModel;
 
 import java.time.LocalDateTime;
 import java.util.Set;
@@ -19,6 +18,6 @@ public class TipResponse {
     private String description;
     private LocalDateTime created;
 
-    private Set<TagRequest> tags;
+    private Set<EntityModel<TagResponse>> tags;
 
 }
