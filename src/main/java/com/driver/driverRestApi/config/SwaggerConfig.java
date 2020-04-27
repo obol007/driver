@@ -6,8 +6,6 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.hateoas.client.LinkDiscoverer;
 import org.springframework.hateoas.client.LinkDiscoverers;
 import org.springframework.hateoas.mediatype.collectionjson.CollectionJsonLinkDiscoverer;
-import org.springframework.http.MediaType;
-import org.springframework.plugin.core.OrderAwarePluginRegistry;
 import org.springframework.plugin.core.SimplePluginRegistry;
 import springfox.documentation.builders.PathSelectors;
 import springfox.documentation.builders.RequestHandlerSelectors;
@@ -38,21 +36,14 @@ public class SwaggerConfig {
     }
 
 
+    @Bean
+        public LinkDiscoverers discoverers() {
+            List<LinkDiscoverer> plugins = new ArrayList<>();
+            plugins.add(new CollectionJsonLinkDiscoverer());
+            return new LinkDiscoverers(SimplePluginRegistry.create(plugins));
+        }
 
 
-
-//    @Bean
-//        public LinkDiscoverers discoverers() {
-//            List<LinkDiscoverer> plugins = new ArrayList<>();
-//            plugins.add(new CollectionJsonLinkDiscoverer());
-//            return new LinkDiscoverers(SimplePluginRegistry.create(plugins));
-//        }
-
-//    @Bean
-//    public OrderAwarePluginRegistry<LinkDiscoverer, MediaType> discoverers(
-//            OrderAwarePluginRegistry<LinkDiscoverer, MediaType> relProviderPluginRegistry) {
-//        return relProviderPluginRegistry;
-//    }
 
 
 
