@@ -40,12 +40,13 @@ public class SwaggerConfig {
 
 
 
-        @Bean
-        public LinkDiscoverers discoverers() {
-            List<LinkDiscoverer> plugins = new ArrayList<>();
-            plugins.add(new CollectionJsonLinkDiscoverer());
-            return new LinkDiscoverers(SimplePluginRegistry.create(plugins));
-        }
+
+//    @Bean
+//        public LinkDiscoverers discoverers() {
+//            List<LinkDiscoverer> plugins = new ArrayList<>();
+//            plugins.add(new CollectionJsonLinkDiscoverer());
+//            return new LinkDiscoverers(SimplePluginRegistry.create(plugins));
+//        }
 
 //    @Bean
 //    public OrderAwarePluginRegistry<LinkDiscoverer, MediaType> discoverers(
