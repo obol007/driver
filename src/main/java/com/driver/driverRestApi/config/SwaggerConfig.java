@@ -51,7 +51,7 @@ public class SwaggerConfig {
                 "DRIVER RESTful API",
                 "RESTful Web Service",
                 "1.0",
-                "",
+                "Terms of service",
                 new Contact("Piotr Obolewicz", "https://www.github.com/obol007/driver", "p.obolewicz@gmail.com"),
                 "LinkedIn",
                 "http://www.linkedin.com/in/piotrobolewicz/", Collections.emptyList());
