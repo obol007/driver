@@ -10,14 +10,11 @@ import java.util.Set;
 @Data
 public class TipResponse {
 
+
     Long id;
-
     private String title;
-
-
     private String description;
     private LocalDateTime created;
-
     private Set<EntityModel<TagResponse>> tags;
 
 }

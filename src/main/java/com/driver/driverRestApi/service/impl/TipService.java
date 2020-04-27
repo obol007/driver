@@ -1,6 +1,7 @@
 package com.driver.driverRestApi.service.impl;
 
 import com.driver.driverRestApi.converter.TagConverter;
+import com.driver.driverRestApi.dto.request.TipRequest;
 import com.driver.driverRestApi.dto.response.TipResponse;
 import com.driver.driverRestApi.exception.ResourceNotFoundException;
 import com.driver.driverRestApi.model.Tag;
@@ -8,6 +9,7 @@ import com.driver.driverRestApi.model.Tip;
 import com.driver.driverRestApi.repository.impl.MySqlTagRepository;
 import com.driver.driverRestApi.repository.impl.MySqlTipRepository;
 import lombok.extern.slf4j.Slf4j;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -24,6 +26,7 @@ public class TipService {
     MySqlTipRepository tipRepository;
     TagConverter tagConverter;
     MySqlTagRepository tagRepository;
+    ModelMapper mapper = new ModelMapper();
 
     public TipService(MySqlTipRepository tipRepository,
                       TagConverter tagConverter,
@@ -48,5 +51,19 @@ public class TipService {
         Set<Tag> savedTags = tags.stream().map((element)->tagRepository.saveAndFlush(element)).collect(Collectors.toSet());
         tip.setTags(savedTags);
        return tipRepository.save(tip);
+    }
+
+    public Tip updateTip(TipRequest tipRequest, Long id) {
+
+        Tip tip = tipRepository.findById(id).orElseGet(Tip::new);
+        mapper.map(tipRequest,tip);
+        tip.setId(id);
+        return tipRepository.save(tip);
+    }
+
+    public void deleteTip(Long id) {
+        Tip tip = tipRepository.findById(id)
+                .orElseThrow(()-> new ResourceNotFoundException(String.format("Tip with id: '%s' doesn't exist",id)));
+        tipRepository.delete(tip);
     }
 }

@@ -2,14 +2,21 @@ package com.driver.driverRestApi.controller;
 
 import com.driver.driverRestApi.assembler.TipAssembler;
 import com.driver.driverRestApi.converter.TipConverter;
+import com.driver.driverRestApi.dto.request.TagRequest;
 import com.driver.driverRestApi.dto.request.TipRequest;
+import com.driver.driverRestApi.dto.response.TagResponse;
 import com.driver.driverRestApi.dto.response.TipResponse;
+import com.driver.driverRestApi.dto.response.TipResponse;
+import com.driver.driverRestApi.model.Tag;
 import com.driver.driverRestApi.model.Tip;
 import com.driver.driverRestApi.service.impl.TipService;
 import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiResponse;
+import io.swagger.annotations.ApiResponses;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.EntityModel;
+import org.springframework.hateoas.IanaLinkRelations;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -17,6 +24,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponents;
 import org.springframework.web.util.UriComponentsBuilder;
 
+import javax.validation.Valid;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -42,12 +50,6 @@ public class TipController {
 
     @GetMapping
     @ApiOperation(value = "Find all tips")
-//    public List<TipResponse> getTips(){
-//        return tipService.getTips().stream()
-//                .map(tipConverter::tipToResponse)
-//                .collect(Collectors.toList());
-//    }
-
     public CollectionModel<EntityModel<TipResponse>> getTips() {
         List<Tip> tips = tipService.getTips();
         List<EntityModel<TipResponse>> tipEntities = tips.stream()
@@ -60,29 +62,44 @@ public class TipController {
 
     @GetMapping("/{id}")
     @ApiOperation(value = "Find a single tip")
-    public TipResponse getTip(@PathVariable Long id){
-       Tip tip = tipService.findTip(id);
-       return tipConverter.tipToResponse(tip);
+    public EntityModel<TipResponse> getTip(@PathVariable("id") Long id) {
+        Tip tip = tipService.findTip(id);
+        TipResponse tipResponse = tipConverter.tipToResponse(tip);
+        return assembler.toModel(tipResponse);
     }
 
     @PostMapping
     @ApiOperation(value = "Create a tip")
-    public ResponseEntity<?> createTip(@RequestBody TipRequest tipRequest,
-                                 UriComponentsBuilder builder){
-        log.warn("Tip request: "+tipRequest);
+    public ResponseEntity<?> createTip(@Valid @RequestBody TipRequest tipRequest) {
         Tip tip = tipConverter.requestToTip(tipRequest);
-        log.warn("Tip converted: "+tip);
         Tip tipCreated = tipService.createTip(tip);
-        log.warn("Tip created: "+tipCreated);
-
-        Long id = tipCreated.getId();
-        UriComponents uriComponents = builder.path("/api/tip/{id}").buildAndExpand(id);
-        HttpHeaders headers = new HttpHeaders();
-        headers.setLocation(uriComponents.toUri());
-        return new ResponseEntity<>(tipConverter.tipToResponse(tipCreated), headers, HttpStatus.CREATED);
-
+        EntityModel<TipResponse> tipModel = assembler.toModel(tipConverter.tipToResponse(tipCreated));
+        return ResponseEntity
+                .created(tipModel.getRequiredLink(IanaLinkRelations.SELF).toUri())
+                .body(tipModel);
     }
 
+    @PutMapping("/{id}")
+    @ApiOperation(value = "Update a tip")
+    public ResponseEntity<?> updateTip(@RequestBody TipRequest tipRequest,
+                                       @PathVariable Long id) {
+        Tip tipUpdated = tipService.updateTip(tipRequest, id);
+        EntityModel<TipResponse> tipModel = assembler.toModel(tipConverter.tipToResponse(tipUpdated));
+        return ResponseEntity
+                .created(tipModel.getRequiredLink(IanaLinkRelations.SELF).toUri())
+                .body(tipModel);
+    }
+
+    @DeleteMapping("/{id}")
+    @ApiOperation(value = "Delete a tip")
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "Tip deleted!")
+    }
+    )
+    public void deleteTip(@PathVariable Long id) {
+        tipService.deleteTip(id);
+//        return ResponseEntity.noContent().build();
+    }
 
 
 
