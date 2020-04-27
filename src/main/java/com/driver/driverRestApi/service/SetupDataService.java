@@ -30,7 +30,7 @@ public class SetupDataService implements CommandLineRunner {
         tagRepository.save(tag1);
 
 
-
-
     }
+
+
 }
