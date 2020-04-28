@@ -66,11 +66,11 @@ public class TipService {
 
         Tip tip = tipRepository.findById(id).orElseGet(Tip::new);
         Set<TagRequest> tags = tipRequest.getTags();
-
         Set<Tag> savedTags = tags.stream().map(tagService::createTag).collect(Collectors.toSet());
 
-        mapper.map(tipRequest,tip);
         tip.setId(id);
+        tip.setTitle(tipRequest.getTitle());
+        tip.setDescription(tipRequest.getDescription());
         tip.setTags(savedTags);
         return tipRepository.save(tip);
     }
