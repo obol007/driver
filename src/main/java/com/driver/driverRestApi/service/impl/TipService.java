@@ -55,7 +55,6 @@ public class TipService {
 
     public Tip createTip(TipRequest tipRequest) {
         Set<TagRequest> tags = tipRequest.getTags();
-        //TODO: check if tags already exist
 //        Set<Tag> savedTags = tags.stream().map((element)->tagRepository.saveAndFlush(element)).collect(Collectors.toSet());
         Set<Tag> savedTags = tags.stream().map(tagService::createTag).collect(Collectors.toSet());
         Tip tip = tipConverter.requestToTip(tipRequest);
@@ -66,8 +65,13 @@ public class TipService {
     public Tip updateTip(TipRequest tipRequest, Long id) {
 
         Tip tip = tipRepository.findById(id).orElseGet(Tip::new);
+        Set<TagRequest> tags = tipRequest.getTags();
+
+        Set<Tag> savedTags = tags.stream().map(tagService::createTag).collect(Collectors.toSet());
+
         mapper.map(tipRequest,tip);
         tip.setId(id);
+        tip.setTags(savedTags);
         return tipRepository.save(tip);
     }
 

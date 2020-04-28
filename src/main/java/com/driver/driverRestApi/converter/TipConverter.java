@@ -30,6 +30,7 @@ public class TipConverter {
         Set<TagResponse> tagResponses = tip.getTags().stream().map(tagConverter::tagToResponse).collect(Collectors.toSet());
         tipResponse.setTags(tagResponses.stream().map(assembler::toModelWithSelfRel).collect(Collectors.toSet()));
         tipResponse.setCreated(tip.getCreated());
+        tipResponse.setUpdated(tip.getUpdated());
         tipResponse.setDescription(tip.getDescription());
         tipResponse.setTitle(tip.getTitle());
         tipResponse.setId(tip.getId());

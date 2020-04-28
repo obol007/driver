@@ -73,7 +73,6 @@ public class TipController {
     public ResponseEntity<?> createTip(@Valid @RequestBody TipRequest tipRequest) {
         Tip tipCreated = tipService.createTip(tipRequest);
 
-
         EntityModel<TipResponse> tipModel = assembler.toModel(tipConverter.tipToResponse(tipCreated));
         return ResponseEntity
                 .created(tipModel.getRequiredLink(IanaLinkRelations.SELF).toUri())

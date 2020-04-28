@@ -1,10 +1,10 @@
 package com.driver.driverRestApi.model;
 
-import com.driver.driverRestApi.dto.response.TagResponse;
+
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import org.springframework.data.annotation.CreatedDate;
-import org.springframework.hateoas.EntityModel;
+import org.springframework.data.annotation.LastModifiedDate;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -22,34 +22,32 @@ public class Tip extends BaseEntity {
     @CreatedDate
     private LocalDateTime created;
 
+    @LastModifiedDate
+    private LocalDateTime updated;
+
     private String title;
 
 
     private String description;
 
-    @ManyToMany(cascade = CascadeType.MERGE)
+    @ManyToMany
     private Set<Tag> tags;
 
 
     @PrePersist
-    public void setLocalDateTime(){
+    public void setCreated(){
         LocalDateTime localDateTime = LocalDateTime.now();
         String text = localDateTime.format(formatter);
         this.created = LocalDateTime.parse(text,formatter);
 
     }
+    @PreUpdate
+    public void setUpdated(){
+        LocalDateTime localDateTime = LocalDateTime.now();
+        String text = localDateTime.format(formatter);
+        this.updated = LocalDateTime.parse(text,formatter);
+    }
 
-//
-//    String timeColonPattern = "hh:mm:ss a";
-//    DateTimeFormatter timeColonFormatter = DateTimeFormatter.ofPattern(timeColonPattern);
-//    LocalTime colonTime = LocalTime.now();
-//System.out.println(timeColonFormatter.format(colonTime));
-//
-//    The generated output is “05:35:50 PM“.
-//    @PrePersist
-//    public void PrePersist(){
-//        setLocalDateTime(LocalDateTime.now());
-//    }
 
 }
 

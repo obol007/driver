@@ -15,6 +15,7 @@ public class TipResponse {
     private String title;
     private String description;
     private LocalDateTime created;
+    private LocalDateTime updated;
     private Set<EntityModel<TagResponse>> tags;
 
 }

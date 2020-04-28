@@ -43,6 +43,7 @@ public class TagService implements TagServiceInterface {
         Optional<Tag> tag = tagRepository.findByNameIgnoreCase(tagRequest.getName());
         if(tag.isEmpty()){
             Tag newTag = tagConverter.requestToTag(tagRequest);
+            log.warn("New tag after conversion: "+newTag);
             return tagRepository.save(newTag);
         }
         return tag.get();
