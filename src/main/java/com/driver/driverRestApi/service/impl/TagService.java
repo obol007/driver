@@ -1,7 +1,7 @@
 package com.driver.driverRestApi.service.impl;
 
+import com.driver.driverRestApi.converter.TagConverter;
 import com.driver.driverRestApi.dto.request.TagRequest;
-import com.driver.driverRestApi.dto.response.TagResponse;
 import com.driver.driverRestApi.exception.EmptyTagException;
 import com.driver.driverRestApi.exception.ResourceNotFoundException;
 import com.driver.driverRestApi.model.Tag;
@@ -15,6 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 
 import java.util.List;
+import java.util.Optional;
 
 
 @Service
@@ -23,11 +24,13 @@ import java.util.List;
 public class TagService implements TagServiceInterface {
 
     private final TagRepository tagRepository;
+    private final TagConverter tagConverter;
     private final ModelMapper mapper = new ModelMapper();
 
-    public TagService(@Qualifier("MySQL") TagRepository tagRepository) {
+    public TagService(@Qualifier("MySQL") TagRepository tagRepository,
+                      TagConverter tagConverter) {
         this.tagRepository = tagRepository;
-
+        this.tagConverter = tagConverter;
     }
 
 
@@ -36,8 +39,13 @@ public class TagService implements TagServiceInterface {
         .orElseThrow(()->new ResourceNotFoundException(String.format("Tag with id: '%s' doesn't exist",id)));
     }
 
-    public Tag createTag(Tag tag) {
-        return tagRepository.save(tag);
+    public Tag createTag(TagRequest tagRequest) {
+        Optional<Tag> tag = tagRepository.findByNameIgnoreCase(tagRequest.getName());
+        if(tag.isEmpty()){
+            Tag newTag = tagConverter.requestToTag(tagRequest);
+            return tagRepository.save(newTag);
+        }
+        return tag.get();
     }
 
     public List<Tag> getAllTags() {
@@ -56,6 +64,7 @@ public class TagService implements TagServiceInterface {
     }
 
     public void deleteTag(Long id) {
+        //TODO: check if tag is in use!
         Tag tag = tagRepository.findById(id)
                 .orElseThrow(()-> new ResourceNotFoundException(String.format("Tag with id: '%s' doesn't exist",id)));
         tagRepository.delete(tag);

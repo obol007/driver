@@ -70,8 +70,8 @@ public class TagController {
     @PostMapping
     @ApiOperation(value = "Create a tag")
     public ResponseEntity<?> createTag(@Valid @RequestBody TagRequest tagRequest) {
-        Tag tag = tagConverter.requestToTag(tagRequest);
-        Tag tagCreated = tagService.createTag(tag);
+
+        Tag tagCreated = tagService.createTag(tagRequest);
         EntityModel<TagResponse> tagModel = assembler.toModel(tagConverter.tagToResponse(tagCreated));
         return ResponseEntity
                 .created(tagModel.getRequiredLink(IanaLinkRelations.SELF).toUri())

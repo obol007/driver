@@ -16,4 +16,8 @@ public interface TagRepository {
 
    void delete(Tag tag);
 
+    Optional<Tag> findByNameIgnoreCase(String name);
+
+
+
 }

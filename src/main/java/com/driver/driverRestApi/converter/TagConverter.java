@@ -23,7 +23,7 @@ public class TagConverter {
 
     public Tag requestToTag(TagRequest tagRequest) {
         Tag tag = new Tag();
-        tag.setName(tagRequest.getName());
+        tag.setName(tagRequest.getName().toLowerCase());
         return tag;
     }
 

@@ -1,6 +1,8 @@
 package com.driver.driverRestApi.service.impl;
 
 import com.driver.driverRestApi.converter.TagConverter;
+import com.driver.driverRestApi.converter.TipConverter;
+import com.driver.driverRestApi.dto.request.TagRequest;
 import com.driver.driverRestApi.dto.request.TipRequest;
 import com.driver.driverRestApi.dto.response.TipResponse;
 import com.driver.driverRestApi.exception.ResourceNotFoundException;
@@ -24,16 +26,22 @@ import java.util.stream.Collectors;
 public class TipService {
 
     MySqlTipRepository tipRepository;
+    TipConverter tipConverter;
     TagConverter tagConverter;
     MySqlTagRepository tagRepository;
+    TagService tagService;
     ModelMapper mapper = new ModelMapper();
 
     public TipService(MySqlTipRepository tipRepository,
                       TagConverter tagConverter,
-                      @Qualifier("MySQL") MySqlTagRepository tagRepository) {
+                      @Qualifier("MySQL") MySqlTagRepository tagRepository,
+                      TagService tagService,
+                      TipConverter tipConverter) {
         this.tipRepository = tipRepository;
         this.tagConverter = tagConverter;
         this.tagRepository = tagRepository;
+        this.tagService = tagService;
+        this.tipConverter = tipConverter;
     }
 
 
@@ -45,10 +53,12 @@ public class TipService {
         return tipRepository.findById(id).orElseThrow(()->new ResourceNotFoundException("There is no tip with id: "+id));
     }
 
-    public Tip createTip(Tip tip) {
-        Set<Tag> tags = tip.getTags();
+    public Tip createTip(TipRequest tipRequest) {
+        Set<TagRequest> tags = tipRequest.getTags();
         //TODO: check if tags already exist
-        Set<Tag> savedTags = tags.stream().map((element)->tagRepository.saveAndFlush(element)).collect(Collectors.toSet());
+//        Set<Tag> savedTags = tags.stream().map((element)->tagRepository.saveAndFlush(element)).collect(Collectors.toSet());
+        Set<Tag> savedTags = tags.stream().map(tagService::createTag).collect(Collectors.toSet());
+        Tip tip = tipConverter.requestToTip(tipRequest);
         tip.setTags(savedTags);
        return tipRepository.save(tip);
     }

@@ -71,8 +71,9 @@ public class TipController {
     @PostMapping
     @ApiOperation(value = "Create a tip")
     public ResponseEntity<?> createTip(@Valid @RequestBody TipRequest tipRequest) {
-        Tip tip = tipConverter.requestToTip(tipRequest);
-        Tip tipCreated = tipService.createTip(tip);
+        Tip tipCreated = tipService.createTip(tipRequest);
+
+
         EntityModel<TipResponse> tipModel = assembler.toModel(tipConverter.tipToResponse(tipCreated));
         return ResponseEntity
                 .created(tipModel.getRequiredLink(IanaLinkRelations.SELF).toUri())
