@@ -14,6 +14,7 @@ import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 public class ApiController {
 
     @GetMapping
+    @ApiOperation(value = "Show content")
     public RepresentationModel index() {
         RepresentationModel rootModel = new RepresentationModel();
         rootModel.add(linkTo(methodOn(TipController.class).getTips()).withRel("tips"));

@@ -9,6 +9,7 @@ import org.springframework.data.annotation.LastModifiedDate;
 import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.List;
 import java.util.Set;
 
 @EqualsAndHashCode(callSuper = true)
@@ -32,6 +33,9 @@ public class Tip extends BaseEntity {
 
     @ManyToMany
     private Set<Tag> tags;
+
+    @OneToMany(mappedBy = "tip")
+    private List<Question> questions;
 
 
     @PrePersist

@@ -2,12 +2,8 @@ package com.driver.driverRestApi.controller;
 
 import com.driver.driverRestApi.assembler.TipAssembler;
 import com.driver.driverRestApi.converter.TipConverter;
-import com.driver.driverRestApi.dto.request.TagRequest;
 import com.driver.driverRestApi.dto.request.TipRequest;
-import com.driver.driverRestApi.dto.response.TagResponse;
 import com.driver.driverRestApi.dto.response.TipResponse;
-import com.driver.driverRestApi.dto.response.TipResponse;
-import com.driver.driverRestApi.model.Tag;
 import com.driver.driverRestApi.model.Tip;
 import com.driver.driverRestApi.service.impl.TipService;
 import io.swagger.annotations.ApiOperation;
@@ -17,12 +13,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.hateoas.IanaLinkRelations;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.util.UriComponents;
-import org.springframework.web.util.UriComponentsBuilder;
 
 import javax.validation.Valid;
 import java.util.List;
