@@ -1,5 +1,6 @@
 package com.driver.driverRestApi.assembler;
 
+import com.driver.driverRestApi.controller.AnswerController;
 import com.driver.driverRestApi.controller.QuestionController;
 import com.driver.driverRestApi.controller.TagController;
 import com.driver.driverRestApi.dto.response.QuestionResponse;
@@ -20,7 +21,17 @@ public class QuestionAssembler implements RepresentationModelAssembler<QuestionR
     {
         return new EntityModel<>(questionResponse,
                 linkTo(methodOn(QuestionController.class).getQuestion(questionResponse.getId(),questionResponse.getTipId())).withSelfRel(),
-                linkTo(methodOn(QuestionController.class).getQuestions(questionResponse.getId())).withRel("questions"));
+                linkTo(methodOn(QuestionController.class).getQuestions(questionResponse.getTipId()))
+                        .withRel("All questions of the tip no."+questionResponse.getTipId()),
+                linkTo(methodOn(AnswerController.class).allQuestions()).withRel("All questions"));
+    }
+
+    public EntityModel<QuestionResponse> toModelWithAllQuestion(QuestionResponse questionResponse)
+    {
+        return new EntityModel<>(questionResponse,
+                linkTo(methodOn(QuestionController.class).getQuestion(questionResponse.getId(),questionResponse.getTipId())).withSelfRel(),
+                linkTo(methodOn(QuestionController.class).getQuestions(questionResponse.getTipId()))
+                        .withRel("All questions of the tip no."+questionResponse.getTipId()));
     }
 
 

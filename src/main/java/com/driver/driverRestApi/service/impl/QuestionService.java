@@ -78,4 +78,10 @@ public class QuestionService {
                 .orElseThrow(()->new ResourceNotFoundException(String.format("Question with id: '%s' doesn't exist!",qId)));
         questionRepository.deleteById(qId);
     }
+
+    public List<Question> getAll() {
+        List<Question> questions = questionRepository.findAll();
+        if(questions.isEmpty()) throw new ResourceNotFoundException("There are no questions in the database");
+        return questions;
+    }
 }
