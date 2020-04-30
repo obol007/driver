@@ -29,7 +29,6 @@ public class TipService {
     TagConverter tagConverter;
     MySqlTagRepository tagRepository;
     TagService tagService;
-    ModelMapper mapper = new ModelMapper();
 
     public TipService(MySqlTipRepository tipRepository,
                       TagConverter tagConverter,
@@ -49,7 +48,7 @@ public class TipService {
     }
 
     public Tip findTip(Long id) {
-        return tipRepository.findById(id).orElseThrow(()->new ResourceNotFoundException("There is no tip with id: "+id));
+        return tipRepository.findById(id).orElseThrow(()->new ResourceNotFoundException(String.format("Tip with id: '%s' doesn't exist",id)));
     }
 
     public Tip createTip(TipRequest tipRequest) {
@@ -79,5 +78,9 @@ public class TipService {
         Tip tip = tipRepository.findById(id)
                 .orElseThrow(()-> new ResourceNotFoundException(String.format("Tip with id: '%s' doesn't exist",id)));
         tipRepository.delete(tip);
+    }
+
+    public Boolean doesExist(Long id) {
+        return tipRepository.findById(id).isPresent();
     }
 }

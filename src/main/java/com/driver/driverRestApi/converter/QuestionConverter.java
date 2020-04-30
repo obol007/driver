@@ -1,7 +1,10 @@
 package com.driver.driverRestApi.converter;
 
+import com.driver.driverRestApi.dto.request.QuestionRequest;
 import com.driver.driverRestApi.dto.response.QuestionResponse;
 import com.driver.driverRestApi.model.Question;
+import com.driver.driverRestApi.model.Tip;
+import com.driver.driverRestApi.repository.impl.MySqlTipRepository;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Component;
 
@@ -10,9 +13,13 @@ public class QuestionConverter {
 
     private final ModelMapper mapper = new ModelMapper();
 
-    public QuestionResponse toResponse(Question q){
+
+    public QuestionResponse qToResponse(Question q){
         return mapper.map(q,QuestionResponse.class);
     }
 
 
+    public Question reqToQuestion(QuestionRequest qRequest) {
+        return mapper.map(qRequest,Question.class);
+    }
 }

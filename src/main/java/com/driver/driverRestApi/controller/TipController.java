@@ -69,7 +69,6 @@ public class TipController {
         Tip tipCreated = tipService.createTip(tipRequest);
 
         EntityModel<TipResponse> tipModel = assembler.toModel(tipConverter.tipToResponse(tipCreated));
-        //TODO: check without IanaLink
         return ResponseEntity
                 .created(tipModel.getRequiredLink(IanaLinkRelations.SELF).toUri())
                 .body(tipModel);
@@ -79,8 +78,12 @@ public class TipController {
     @ApiOperation(value = "Update a tip")
     public ResponseEntity<?> updateTip(@RequestBody TipRequest tipRequest,
                                        @PathVariable Long id) {
+        Boolean tipExists = tipService.doesExist(id);
         Tip tipUpdated = tipService.updateTip(tipRequest, id);
         EntityModel<TipResponse> tipModel = assembler.toModel(tipConverter.tipToResponse(tipUpdated));
+        if(tipExists){
+            return ResponseEntity.ok().body(tipModel);
+        }
         return ResponseEntity
                 .created(tipModel.getRequiredLink(IanaLinkRelations.SELF).toUri())
                 .body(tipModel);
