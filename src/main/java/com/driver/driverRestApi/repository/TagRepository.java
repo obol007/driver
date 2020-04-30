@@ -6,7 +6,7 @@ import com.driver.driverRestApi.model.Tag;
 import java.util.List;
 import java.util.Optional;
 
-public interface TagRepository {
+public interface TagRepository{
 
    Optional<Tag> findById(Long id);
 
@@ -17,6 +17,7 @@ public interface TagRepository {
    void delete(Tag tag);
 
     Optional<Tag> findByNameIgnoreCase(String name);
+
 
 
 

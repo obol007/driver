@@ -4,7 +4,6 @@ import com.driver.driverRestApi.converter.TagConverter;
 import com.driver.driverRestApi.converter.TipConverter;
 import com.driver.driverRestApi.dto.request.TagRequest;
 import com.driver.driverRestApi.dto.request.TipRequest;
-import com.driver.driverRestApi.dto.response.TipResponse;
 import com.driver.driverRestApi.exception.ResourceNotFoundException;
 import com.driver.driverRestApi.model.Tag;
 import com.driver.driverRestApi.model.Tip;
@@ -55,6 +54,7 @@ public class TipService {
 
     public Tip createTip(TipRequest tipRequest) {
         Set<TagRequest> tags = tipRequest.getTags();
+        //TODO: save & flush
 //        Set<Tag> savedTags = tags.stream().map((element)->tagRepository.saveAndFlush(element)).collect(Collectors.toSet());
         Set<Tag> savedTags = tags.stream().map(tagService::createTag).collect(Collectors.toSet());
         Tip tip = tipConverter.requestToTip(tipRequest);

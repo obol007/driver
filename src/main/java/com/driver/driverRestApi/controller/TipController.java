@@ -54,10 +54,13 @@ public class TipController {
 
     @GetMapping("/{id}")
     @ApiOperation(value = "Find a single tip")
-    public EntityModel<TipResponse> getTip(@PathVariable("id") Long id) {
+    public ResponseEntity<?> getTip(@PathVariable("id") Long id) {
         Tip tip = tipService.findTip(id);
         TipResponse tipResponse = tipConverter.tipToResponse(tip);
-        return assembler.toModel(tipResponse);
+        //TODO: test the difference
+//        return assembler.toModel(tipResponse);
+        EntityModel<TipResponse> tipModel = assembler.toModel(tipResponse);
+        return ResponseEntity.ok().body(tipModel);
     }
 
     @PostMapping
@@ -66,6 +69,7 @@ public class TipController {
         Tip tipCreated = tipService.createTip(tipRequest);
 
         EntityModel<TipResponse> tipModel = assembler.toModel(tipConverter.tipToResponse(tipCreated));
+        //TODO: check without IanaLink
         return ResponseEntity
                 .created(tipModel.getRequiredLink(IanaLinkRelations.SELF).toUri())
                 .body(tipModel);
@@ -88,9 +92,9 @@ public class TipController {
             @ApiResponse(code = 200, message = "Tip deleted!")
     }
     )
-    public void deleteTip(@PathVariable Long id) {
+    public ResponseEntity<?> deleteTip(@PathVariable Long id) {
         tipService.deleteTip(id);
-//        return ResponseEntity.noContent().build();
+        return ResponseEntity.noContent().build();
     }
 
 
