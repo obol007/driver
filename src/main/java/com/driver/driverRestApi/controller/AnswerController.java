@@ -56,7 +56,7 @@ public class AnswerController {
 
 
     @GetMapping("/{questionId}/answer")
-    @ApiOperation(value = "Show all answers for a given question")
+    @ApiOperation(value = "Show all answers to a given question")
     public CollectionModel<?> showAnswers(@PathVariable("questionId") Long qId) {
         List<Answer> answers = aService.getAllToQuestion(qId);
         List<EntityModel<AnswerResponse>> aEntities = answers.stream()
@@ -90,7 +90,7 @@ public class AnswerController {
     }
 
     @PutMapping("/{questionId}/answer/{answerId}")
-    @ApiOperation(value = "Edit an aswer for a given question")
+    @ApiOperation(value = "Edit an answer to a given question")
     public ResponseEntity<?> editAnswer(@PathVariable("questionId") Long qId,
                                         @PathVariable("answerId") Long aId,
                                         @Valid @RequestBody AnswerEditRequest answerRequest) {
@@ -105,7 +105,7 @@ public class AnswerController {
     }
 
     @DeleteMapping("/{questionId}/answer/{answerId}")
-    @ApiOperation(value = "Delete an answer for a given question")
+    @ApiOperation(value = "Delete an answer to a given question")
     public ResponseEntity<?> deleteAnswer(@PathVariable("questionId") Long qId,
                                           @PathVariable("answerId") Long aId){
         aService.delete(qId,aId);
