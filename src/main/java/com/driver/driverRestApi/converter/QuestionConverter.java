@@ -3,8 +3,6 @@ package com.driver.driverRestApi.converter;
 import com.driver.driverRestApi.dto.request.QuestionRequest;
 import com.driver.driverRestApi.dto.response.QuestionResponse;
 import com.driver.driverRestApi.model.Question;
-import com.driver.driverRestApi.model.Tip;
-import com.driver.driverRestApi.repository.impl.MySqlTipRepository;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Component;
 

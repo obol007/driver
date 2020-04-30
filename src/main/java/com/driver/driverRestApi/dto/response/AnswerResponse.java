@@ -6,5 +6,8 @@ import lombok.Data;
 public class AnswerResponse {
 
     private Long id;
+    private Long questionId;
     private String answerText;
+    private Boolean isCorrect;
+
 }

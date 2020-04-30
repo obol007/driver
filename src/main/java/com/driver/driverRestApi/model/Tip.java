@@ -1,8 +1,9 @@
 package com.driver.driverRestApi.model;
 
 
-import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.Setter;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 
@@ -14,7 +15,8 @@ import java.util.Set;
 
 @EqualsAndHashCode(callSuper = true)
 @Entity
-@Data
+@Getter
+@Setter
 public class Tip extends BaseEntity {
 
     @Transient

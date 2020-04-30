@@ -21,9 +21,11 @@ public class QuestionAssembler implements RepresentationModelAssembler<QuestionR
     {
         return new EntityModel<>(questionResponse,
                 linkTo(methodOn(QuestionController.class).getQuestion(questionResponse.getId(),questionResponse.getTipId())).withSelfRel(),
+                linkTo(methodOn(AnswerController.class).showAnswers(questionResponse.getId()))
+                        .withRel("Answers to this question"),
                 linkTo(methodOn(QuestionController.class).getQuestions(questionResponse.getTipId()))
-                        .withRel("All questions of the tip no."+questionResponse.getTipId()),
-                linkTo(methodOn(AnswerController.class).allQuestions()).withRel("All questions"));
+                        .withRel("All questions to the tip with id: "+questionResponse.getTipId()),
+                linkTo(methodOn(AnswerController.class).getQuestions()).withRel("All questions"));
     }
 
     public EntityModel<QuestionResponse> toModelWithAllQuestion(QuestionResponse questionResponse)

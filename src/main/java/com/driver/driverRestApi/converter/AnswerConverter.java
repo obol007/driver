@@ -1,21 +1,22 @@
 package com.driver.driverRestApi.converter;
 
+import com.driver.driverRestApi.dto.request.AnswerRequest;
 import com.driver.driverRestApi.dto.response.AnswerResponse;
-import org.springframework.hateoas.CollectionModel;
-import org.springframework.hateoas.EntityModel;
-import org.springframework.hateoas.server.RepresentationModelAssembler;
+import com.driver.driverRestApi.model.Answer;
+import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Component;
 
 @Component
-public class AnswerConverter implements RepresentationModelAssembler<AnswerResponse, EntityModel<AnswerResponse>> {
+public class AnswerConverter {
 
-    @Override
-    public EntityModel<AnswerResponse> toModel(AnswerResponse entity) {
-        return null;
+    private final ModelMapper mapper = new ModelMapper();
+
+
+    public AnswerResponse aToResponse(Answer a){
+        return mapper.map(a,AnswerResponse.class);
     }
 
-    @Override
-    public CollectionModel<EntityModel<AnswerResponse>> toCollectionModel(Iterable<? extends AnswerResponse> entities) {
-        return null;
+    public Answer reqToAnswer(AnswerRequest aRequest) {
+        return mapper.map(aRequest,Answer.class);
     }
 }

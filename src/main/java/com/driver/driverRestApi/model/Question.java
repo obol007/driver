@@ -2,6 +2,7 @@ package com.driver.driverRestApi.model;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.ToString;
 
 import javax.persistence.Entity;
 import javax.persistence.ManyToOne;
@@ -15,6 +16,7 @@ public class Question extends BaseEntity{
 
     private String questionText;
 
+    @ToString.Exclude
     @OneToMany(mappedBy = "question")
     private List<Answer> answers;
 

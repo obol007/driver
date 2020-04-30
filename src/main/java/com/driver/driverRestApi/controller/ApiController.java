@@ -1,5 +1,6 @@
 package com.driver.driverRestApi.controller;
 
+import com.driver.driverRestApi.model.Answer;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.hateoas.RepresentationModel;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -17,8 +18,9 @@ public class ApiController {
     @ApiOperation(value = "Show content")
     public RepresentationModel index() {
         RepresentationModel rootModel = new RepresentationModel();
-        rootModel.add(linkTo(methodOn(TipController.class).getTips()).withRel("tips"));
-        rootModel.add(linkTo(methodOn(TagController.class).getTags()).withRel("tags"));
+        rootModel.add(linkTo(methodOn(AnswerController.class).getQuestions()).withRel("Questions"));
+        rootModel.add(linkTo(methodOn(TagController.class).getTags()).withRel("Tags"));
+        rootModel.add(linkTo(methodOn(TipController.class).getTips()).withRel("Tips"));
         return rootModel;
     }
 }
