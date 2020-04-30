@@ -1,7 +1,6 @@
 package com.driver.driverRestApi.assembler;
 
 import com.driver.driverRestApi.controller.AnswerController;
-import com.driver.driverRestApi.controller.QuestionController;
 import com.driver.driverRestApi.dto.response.AnswerResponse;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.EntityModel;

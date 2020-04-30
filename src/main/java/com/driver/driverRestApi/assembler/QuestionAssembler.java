@@ -2,7 +2,6 @@ package com.driver.driverRestApi.assembler;
 
 import com.driver.driverRestApi.controller.AnswerController;
 import com.driver.driverRestApi.controller.QuestionController;
-import com.driver.driverRestApi.controller.TagController;
 import com.driver.driverRestApi.dto.response.QuestionResponse;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.EntityModel;
@@ -25,7 +24,7 @@ public class QuestionAssembler implements RepresentationModelAssembler<QuestionR
                         .withRel("Answers to this question"),
                 linkTo(methodOn(QuestionController.class).getQuestions(questionResponse.getTipId()))
                         .withRel("All questions to the tip with id: "+questionResponse.getTipId()),
-                linkTo(methodOn(AnswerController.class).getQuestions()).withRel("All questions"));
+                linkTo(methodOn(QuestionController.class).getQuestions()).withRel("All questions"));
     }
 
     public EntityModel<QuestionResponse> toModelWithAllQuestion(QuestionResponse questionResponse)
@@ -33,7 +32,7 @@ public class QuestionAssembler implements RepresentationModelAssembler<QuestionR
         return new EntityModel<>(questionResponse,
                 linkTo(methodOn(QuestionController.class).getQuestion(questionResponse.getId(),questionResponse.getTipId())).withSelfRel(),
                 linkTo(methodOn(QuestionController.class).getQuestions(questionResponse.getTipId()))
-                        .withRel("All questions of the tip no."+questionResponse.getTipId()));
+                        .withRel("All questions to the tip with id: "+questionResponse.getTipId()));
     }
 
 

@@ -4,6 +4,8 @@ import com.driver.driverRestApi.assembler.AnswerAssembler;
 import com.driver.driverRestApi.assembler.QuestionAssembler;
 import com.driver.driverRestApi.converter.AnswerConverter;
 import com.driver.driverRestApi.converter.QuestionConverter;
+import com.driver.driverRestApi.dto.request.AnswerEditRequest;
+import com.driver.driverRestApi.dto.request.AnswerRequest;
 import com.driver.driverRestApi.dto.response.AnswerResponse;
 import com.driver.driverRestApi.dto.response.QuestionResponse;
 import com.driver.driverRestApi.model.Answer;
@@ -14,9 +16,12 @@ import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.EntityModel;
+import org.springframework.hateoas.IanaLinkRelations;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -49,18 +54,6 @@ public class AnswerController {
         this.aAssembler = aAssembler;
     }
 
-    @GetMapping
-    @ApiOperation(value = "Show all questions")
-    public CollectionModel<?> getQuestions() {
-        List<Question> questions = qService.getAll();
-        List<EntityModel<QuestionResponse>> qEntities = questions.stream()
-                .map(qConverter::qToResponse)
-                .map(qAssembler::toModelWithAllQuestion)
-                .collect(Collectors.toList());
-        return new CollectionModel<>(qEntities,
-                linkTo(methodOn(AnswerController.class).getQuestions()).withSelfRel());
-    }
-
 
     @GetMapping("/{questionId}/answer")
     @ApiOperation(value = "Show all answers for a given question")
@@ -71,14 +64,53 @@ public class AnswerController {
                 .map(aAssembler::toModelWithAllAnswers)
                 .collect(Collectors.toList());
         return new CollectionModel<>(aEntities,
-        linkTo(methodOn(AnswerController.class).showAnswers(qId)).withSelfRel());
+                linkTo(methodOn(AnswerController.class).showAnswers(qId)).withSelfRel());
     }
+
     @GetMapping("/{questionId}/answer/{answerId}")
     @ApiOperation(value = "Show a single answer to the given question")
-    public ResponseEntity<?> showAnswer(@PathVariable("questionId") Long qId, @PathVariable("answerId") Long aId){
-        Answer a = aService.getAnswer(qId,aId);
+    public ResponseEntity<?> showAnswer(@PathVariable("questionId") Long qId, @PathVariable("answerId") Long aId) {
+        Answer a = aService.getAnswer(qId, aId);
         EntityModel<AnswerResponse> aEntity = aAssembler.toModel(aConverter.aToResponse(a));
         return ResponseEntity.ok().body(aEntity);
     }
+
+    @PostMapping("/{questionId}/answer")
+    @ApiOperation(value = "Create an answer/answers to the given question")
+    @ResponseStatus(HttpStatus.CREATED)
+    public CollectionModel<?> createAnswer(@PathVariable("questionId") Long qId,
+                                           @Valid @RequestBody AnswerRequest answerRequest) {
+        List<Answer> answers = aService.create(answerRequest, qId);
+        List<EntityModel<AnswerResponse>> aEntities = answers.stream()
+                .map(aConverter::aToResponse)
+                .map(aAssembler::toModelWithAllAnswers)
+                .collect(Collectors.toList());
+        return new CollectionModel<>(aEntities,
+                linkTo(methodOn(AnswerController.class).showAnswers(qId)).withSelfRel());
+    }
+
+    @PutMapping("/{questionId}/answer/{answerId}")
+    @ApiOperation(value = "Edit an aswer for a given question")
+    public ResponseEntity<?> editAnswer(@PathVariable("questionId") Long qId,
+                                        @PathVariable("answerId") Long aId,
+                                        @Valid @RequestBody AnswerEditRequest answerRequest) {
+        Boolean answerExists = aService.doesExist(aId);
+        Answer a = aService.update(answerRequest, qId, aId);
+        EntityModel<AnswerResponse> aEntity = aAssembler.toModel(aConverter.aToResponse(a));
+        if (answerExists) {
+            return ResponseEntity.ok().body(aEntity);
+        }
+        return ResponseEntity
+                .created(aEntity.getRequiredLink(IanaLinkRelations.SELF).toUri()).body(aEntity);
+    }
+
+    @DeleteMapping("/{questionId}/answer/{answerId}")
+    @ApiOperation(value = "Delete an answer for a given question")
+    public ResponseEntity<?> deleteAnswer(@PathVariable("questionId") Long qId,
+                                          @PathVariable("answerId") Long aId){
+        aService.delete(qId,aId);
+        return ResponseEntity.noContent().build();
+    }
+
 
 }

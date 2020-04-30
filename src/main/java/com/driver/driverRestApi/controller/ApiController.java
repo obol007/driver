@@ -18,7 +18,7 @@ public class ApiController {
     @ApiOperation(value = "Show content")
     public RepresentationModel index() {
         RepresentationModel rootModel = new RepresentationModel();
-        rootModel.add(linkTo(methodOn(AnswerController.class).getQuestions()).withRel("Questions"));
+        rootModel.add(linkTo(methodOn(QuestionController.class).getQuestions()).withRel("Questions"));
         rootModel.add(linkTo(methodOn(TagController.class).getTags()).withRel("Tags"));
         rootModel.add(linkTo(methodOn(TipController.class).getTips()).withRel("Tips"));
         return rootModel;
