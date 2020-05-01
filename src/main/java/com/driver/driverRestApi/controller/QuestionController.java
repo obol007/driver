@@ -99,10 +99,12 @@ public class QuestionController {
     }
     @DeleteMapping("/tip/{tipId}/question/{questionId}")
     @ApiOperation(value = "Delete a question for a given tip")
-    @ApiResponses(@ApiResponse(code= 204, message = "Question has been deleted!"))
+//    @ApiResponses(@ApiResponse(code= 204, message = "Question has been deleted!"))
     public ResponseEntity<?> deleteQuestion(@PathVariable("questionId") Long qId, @PathVariable("tipId") Long tipId ){
         qService.delete(qId, tipId);
-        return ResponseEntity.noContent().build();
+//        return ResponseEntity.noContent().build();
+        return ResponseEntity.ok().body(String.format("Question with id: '%s' has been deleted!",qId));
+
     }
 
 }

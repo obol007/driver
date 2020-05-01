@@ -3,6 +3,7 @@ package com.driver.driverRestApi.service.impl;
 import com.driver.driverRestApi.converter.AnswerConverter;
 import com.driver.driverRestApi.dto.request.AnswerEditRequest;
 import com.driver.driverRestApi.dto.request.AnswerRequest;
+import com.driver.driverRestApi.exception.ForbiddenEditingException;
 import com.driver.driverRestApi.exception.ResourceNotFoundException;
 import com.driver.driverRestApi.model.Answer;
 import com.driver.driverRestApi.model.Question;
@@ -12,6 +13,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @Transactional
@@ -55,15 +57,15 @@ public class AnswerService {
         List<Answer> answers = aConverter.reqToAnswer(answerRequest);
         Question q = qRepository.getOne(qId);
         answers.forEach(answer -> {
-                    answer.setQuestion(q);
-                    aRepository.save(answer);
-                });
+            answer.setQuestion(q);
+            aRepository.save(answer);
+        });
         return answers;
     }
 
     public Answer update(AnswerEditRequest answerRequest, Long qId, Long aId) {
-        //TODO: check whether the answer is for different question
         questionExists(qId);
+        questionAnswerAgreement(qId, aId);
         Answer answer = aConverter.editToAnswer(answerRequest);
         Question q = qRepository.getOne(qId);
         answer.setQuestion(q);
@@ -71,16 +73,25 @@ public class AnswerService {
         return aRepository.save(answer);
 
     }
+    // checking whether the answer belongs to the question
+    private void questionAnswerAgreement(Long qId, Long aId) {
+        Optional<Answer> a = aRepository.findById(aId);
+        if (a.isPresent()) {
+            Long questionId = a.get().getQuestion().getId();
+            if (!questionId.equals(qId))
+                throw new ForbiddenEditingException(String.format("Answer with id: '%s' doesn't belong to the question with id: '%s'", aId, qId));
+        }
+    }
 
-    public Boolean doesExist(Long aId) {
+    public Boolean answerExists(Long aId) {
         return aRepository.findById(aId).isPresent();
     }
 
     public void delete(Long qId, Long aId) {
         questionExists(qId);
-        //TODO: check whether the answer is for this question
+        questionAnswerAgreement(qId,aId);
         Answer a = aRepository.findById(aId)
-                .orElseThrow(()-> new ResourceNotFoundException(String.format("Answer with id: '%s' doesn't exist!",aId)));
+                .orElseThrow(() -> new ResourceNotFoundException(String.format("Answer with id: '%s' doesn't exist!", aId)));
         aRepository.delete(a);
     }
 }

@@ -36,7 +36,7 @@ public class Tip extends BaseEntity {
     @ManyToMany
     private Set<Tag> tags;
 
-    @OneToMany(mappedBy = "tip")
+    @OneToMany(mappedBy = "tip", cascade = CascadeType.REMOVE)
     private List<Question> questions;
 
 

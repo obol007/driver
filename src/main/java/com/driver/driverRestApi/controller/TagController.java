@@ -55,7 +55,7 @@ public class TagController {
 
 
     @GetMapping("/{id}")
-    @ApiOperation(value = "Find a single tag", notes = "Single tag", response = Tag.class)
+    @ApiOperation(value = "Find a single tag", notes = "A single tag", response = Tag.class)
     @ApiResponses(value = {
                     @ApiResponse(code = 200, message = "You have found it!")
             }
@@ -93,7 +93,7 @@ public class TagController {
     @ApiOperation(value = "Delete a tag")
     public ResponseEntity<?> deleteTag(@PathVariable Long id) {
         tagService.deleteTag(id);
-        return ResponseEntity.noContent().build();
+        return ResponseEntity.ok().body(String.format("Tag with id: '%s' has been deleted!",id));
     }
 
 

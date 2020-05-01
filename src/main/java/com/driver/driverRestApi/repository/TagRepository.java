@@ -18,7 +18,5 @@ public interface TagRepository{
 
     Optional<Tag> findByNameIgnoreCase(String name);
 
-
-
-
+    Long isInUse(Long id);
 }

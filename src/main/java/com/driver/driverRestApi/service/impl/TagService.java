@@ -3,6 +3,7 @@ package com.driver.driverRestApi.service.impl;
 import com.driver.driverRestApi.converter.TagConverter;
 import com.driver.driverRestApi.dto.request.TagRequest;
 import com.driver.driverRestApi.exception.EmptyTagException;
+import com.driver.driverRestApi.exception.ForbiddenEditingException;
 import com.driver.driverRestApi.exception.ResourceNotFoundException;
 import com.driver.driverRestApi.model.Tag;
 import com.driver.driverRestApi.repository.TagRepository;
@@ -66,6 +67,9 @@ public class TagService implements TagServiceInterface {
 
     public void deleteTag(Long id) {
         //TODO: check if tag is in use!
+        if(tagRepository.isInUse(id)>0) {
+            throw new ForbiddenEditingException(String.format("You can't delete a tag with id: '%s' because it is in use",id));
+        }
         Tag tag = tagRepository.findById(id)
                 .orElseThrow(()-> new ResourceNotFoundException(String.format("Tag with id: '%s' doesn't exist",id)));
         tagRepository.delete(tag);

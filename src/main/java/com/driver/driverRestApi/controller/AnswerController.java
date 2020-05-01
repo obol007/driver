@@ -7,9 +7,7 @@ import com.driver.driverRestApi.converter.QuestionConverter;
 import com.driver.driverRestApi.dto.request.AnswerEditRequest;
 import com.driver.driverRestApi.dto.request.AnswerRequest;
 import com.driver.driverRestApi.dto.response.AnswerResponse;
-import com.driver.driverRestApi.dto.response.QuestionResponse;
 import com.driver.driverRestApi.model.Answer;
-import com.driver.driverRestApi.model.Question;
 import com.driver.driverRestApi.service.impl.AnswerService;
 import com.driver.driverRestApi.service.impl.QuestionService;
 import io.swagger.annotations.ApiOperation;
@@ -68,7 +66,7 @@ public class AnswerController {
     }
 
     @GetMapping("/{questionId}/answer/{answerId}")
-    @ApiOperation(value = "Show a single answer to the given question")
+    @ApiOperation(value = "Show a single answer to a given question")
     public ResponseEntity<?> showAnswer(@PathVariable("questionId") Long qId, @PathVariable("answerId") Long aId) {
         Answer a = aService.getAnswer(qId, aId);
         EntityModel<AnswerResponse> aEntity = aAssembler.toModel(aConverter.aToResponse(a));
@@ -76,7 +74,7 @@ public class AnswerController {
     }
 
     @PostMapping("/{questionId}/answer")
-    @ApiOperation(value = "Create an answer/answers to the given question")
+    @ApiOperation(value = "Create an answer/answers to a given question")
     @ResponseStatus(HttpStatus.CREATED)
     public CollectionModel<?> createAnswer(@PathVariable("questionId") Long qId,
                                            @Valid @RequestBody AnswerRequest answerRequest) {
@@ -94,10 +92,10 @@ public class AnswerController {
     public ResponseEntity<?> editAnswer(@PathVariable("questionId") Long qId,
                                         @PathVariable("answerId") Long aId,
                                         @Valid @RequestBody AnswerEditRequest answerRequest) {
-        Boolean answerExists = aService.doesExist(aId);
+        Boolean aExists = aService.answerExists(aId);
         Answer a = aService.update(answerRequest, qId, aId);
         EntityModel<AnswerResponse> aEntity = aAssembler.toModel(aConverter.aToResponse(a));
-        if (answerExists) {
+        if (aExists) {
             return ResponseEntity.ok().body(aEntity);
         }
         return ResponseEntity
@@ -109,7 +107,8 @@ public class AnswerController {
     public ResponseEntity<?> deleteAnswer(@PathVariable("questionId") Long qId,
                                           @PathVariable("answerId") Long aId){
         aService.delete(qId,aId);
-        return ResponseEntity.noContent().build();
+//        return ResponseEntity.noContent().build();
+        return ResponseEntity.ok().body(String.format("Answer with id: '%s' has been deleted!",aId));
     }
 
 

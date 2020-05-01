@@ -3,7 +3,9 @@ package com.driver.driverRestApi.service.impl;
 import com.driver.driverRestApi.converter.QuestionConverter;
 import com.driver.driverRestApi.dto.request.QuestionRequest;
 import com.driver.driverRestApi.dto.response.QuestionResponse;
+import com.driver.driverRestApi.exception.NoContentException;
 import com.driver.driverRestApi.exception.ResourceNotFoundException;
+import com.driver.driverRestApi.exception.advice.NoContent;
 import com.driver.driverRestApi.model.Question;
 import com.driver.driverRestApi.repository.impl.MySqlQuestionRepository;
 import com.driver.driverRestApi.repository.impl.MySqlTipRepository;
@@ -35,7 +37,7 @@ public class QuestionService {
         tipExists(id);
         List<Question> questions = questionRepository.findAllByTipId(id);
         if (questions.isEmpty())
-            throw new ResourceNotFoundException("There are no questions for the tip with id: " + id);
+            throw new NoContentException("There are no questions for the tip with id: " + id);
         return questions;
     }
 
@@ -74,6 +76,7 @@ public class QuestionService {
 
     public void delete(Long qId, Long tipId) {
         tipExists(tipId);
+        //TODO: Question Tip agreement
         questionRepository.findById(qId)
                 .orElseThrow(()->new ResourceNotFoundException(String.format("Question with id: '%s' doesn't exist!",qId)));
         questionRepository.deleteById(qId);
@@ -81,7 +84,7 @@ public class QuestionService {
 
     public List<Question> getAll() {
         List<Question> questions = questionRepository.findAll();
-        if(questions.isEmpty()) throw new ResourceNotFoundException("There are no questions in the database");
+        if(questions.isEmpty()) throw new NoContentException("There are no questions in the database");
         return questions;
     }
 }

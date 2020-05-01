@@ -97,7 +97,8 @@ public class TipController {
     )
     public ResponseEntity<?> deleteTip(@PathVariable Long id) {
         tipService.deleteTip(id);
-        return ResponseEntity.noContent().build();
+//        return ResponseEntity.noContent().build();
+        return ResponseEntity.ok().body(String.format("Tip with id: '%s' has been deleted!",id));
     }
 
 
