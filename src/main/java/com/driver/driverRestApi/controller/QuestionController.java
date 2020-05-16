@@ -7,8 +7,6 @@ import com.driver.driverRestApi.dto.response.QuestionResponse;
 import com.driver.driverRestApi.model.Question;
 import com.driver.driverRestApi.service.impl.QuestionService;
 import io.swagger.annotations.ApiOperation;
-import io.swagger.annotations.ApiResponse;
-import io.swagger.annotations.ApiResponses;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.hateoas.IanaLinkRelations;
@@ -87,19 +85,14 @@ public class QuestionController {
     @ApiOperation(value = "Update a question for a given tip")
     public ResponseEntity<?> updateQuestion(@PathVariable("questionId") Long qId, @PathVariable("tipId") Long tipId,
                                             @Valid @RequestBody QuestionRequest qRequest) {
-        Boolean qExist = qService.doesExist(qId);
         Question q = qService.update(qRequest, tipId, qId);
         EntityModel<QuestionResponse> qEntity = qAssembler.toModel(qConverter.qToResponse(q));
-        if (qExist) {
-            return ResponseEntity.ok().body(qEntity);
-        }
-        return ResponseEntity
-                .created(qEntity.getRequiredLink(IanaLinkRelations.SELF).toUri())
-                .body(qEntity);
+        return ResponseEntity.ok().body(qEntity);
     }
+
     @DeleteMapping("/tip/{tipId}/question/{questionId}")
     @ApiOperation(value = "Delete a question for a given tip")
-//    @ApiResponses(@ApiResponse(code= 204, message = "Question has been deleted!"))
+//    @ApiResponses(@ApiResponse(code= 200, message = "Question has been deleted!"))
     public ResponseEntity<?> deleteQuestion(@PathVariable("questionId") Long qId, @PathVariable("tipId") Long tipId ){
         qService.delete(qId, tipId);
 //        return ResponseEntity.noContent().build();

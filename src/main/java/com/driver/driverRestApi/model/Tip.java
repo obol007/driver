@@ -33,6 +33,9 @@ public class Tip extends BaseEntity {
 
     private String description;
 
+    @ManyToOne
+    private Multimedia multimedia;
+
     @ManyToMany
     private Set<Tag> tags;
 

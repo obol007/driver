@@ -1,19 +1,24 @@
 package com.driver.driverRestApi.model;
 
-import lombok.Data;
-import lombok.EqualsAndHashCode;
+import lombok.*;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.Lob;
 import javax.persistence.OneToOne;
 
 @Entity
-@Data
+@Getter @Setter
 @EqualsAndHashCode(callSuper = true)
+@ToString(exclude = "content",callSuper = true)
 public class Multimedia extends BaseEntity{
 
-    private String title;
-    private String content;
+    private String name;
+    @Column(nullable = false)
+    private String contentType;
+    @Lob
+    @Column(columnDefinition = "MEDIUMBLOB")
+    private byte[] content;
 
-    @OneToOne
-    private Tip tip;
+
 }

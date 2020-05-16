@@ -3,6 +3,7 @@ package com.driver.driverRestApi.service.impl;
 import com.driver.driverRestApi.converter.QuestionConverter;
 import com.driver.driverRestApi.dto.request.QuestionRequest;
 import com.driver.driverRestApi.dto.response.QuestionResponse;
+import com.driver.driverRestApi.exception.ForbiddenEditingException;
 import com.driver.driverRestApi.exception.NoContentException;
 import com.driver.driverRestApi.exception.ResourceNotFoundException;
 import com.driver.driverRestApi.exception.advice.NoContent;
@@ -14,6 +15,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @Transactional
@@ -45,12 +47,14 @@ public class QuestionService {
         tipExists(tipId);
         return questionRepository.findById(qId)
                 .orElseThrow(() ->
-                        new ResourceNotFoundException(String.format("Question with id: '%s' for tip with id: '%s' doesn't exist", qId,tipId)));
+                        new ResourceNotFoundException(String
+                                .format("Question with id: '%s' for tip with id: '%s' doesn't exist", qId,tipId)));
     }
 
     public void tipExists(Long id) {
         if (!tipRepository.existsById(id)) {
-            throw new ResourceNotFoundException(String.format("Tip with id: '%s' doesn't exist", id));
+            throw new ResourceNotFoundException(String
+                    .format("Tip with id: '%s' doesn't exist", id));
         }
     }
 
@@ -64,6 +68,7 @@ public class QuestionService {
 
     public Question update(QuestionRequest qRequest, Long tipId, Long qId) {
         tipExists(tipId);
+        tipQuestionAgreement(tipId,qId);
         Question q = qConverter.reqToQuestion(qRequest);
         q.setTip(tipRepository.getOne(tipId));
         q.setId(qId);
@@ -76,10 +81,20 @@ public class QuestionService {
 
     public void delete(Long qId, Long tipId) {
         tipExists(tipId);
-        //TODO: Question Tip agreement
-        questionRepository.findById(qId)
-                .orElseThrow(()->new ResourceNotFoundException(String.format("Question with id: '%s' doesn't exist!",qId)));
+        tipQuestionAgreement(tipId,qId);
         questionRepository.deleteById(qId);
+    }
+
+    private void tipQuestionAgreement(Long tipId, Long qId) {
+        Optional<Question> q = questionRepository.findById(qId);
+        if(q.isEmpty()){
+            throw new ResourceNotFoundException(String
+                    .format("Question with id: '%s' doesn't exist!",qId));
+        }
+        if(!tipId.equals(q.get().getTip().getId())){
+            throw new ForbiddenEditingException(String
+                    .format("Question with id: '%s' doesn't belong to the tip with id: '%s'", qId, tipId));
+        }
     }
 
     public List<Question> getAll() {

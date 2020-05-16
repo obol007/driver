@@ -66,7 +66,6 @@ public class TagService implements TagServiceInterface {
     }
 
     public void deleteTag(Long id) {
-        //TODO: check if tag is in use!
         if(tagRepository.isInUse(id)>0) {
             throw new ForbiddenEditingException(String.format("You can't delete a tag with id: '%s' because it is in use",id));
         }
