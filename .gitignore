@@ -172,13 +172,15 @@ iml
 *.iml
 *.cmd
 #Procfile
-Procfile
+
 
 #Properties
-.properties
+#.properties
 
 HELP.md
 mvnw
 mvnw/**
 .mvn
 .mvn/**
+
+*.jpg
